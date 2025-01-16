@@ -42,7 +42,7 @@ public class MethodArgumentsReader implements PropertyAccessor {
 
   @Override
   public Class<?>[] getSpecificTargetClasses() {
-    return new Class[] {Object[].class};
+    return new Class[]{Object[].class};
   }
 
   @Override

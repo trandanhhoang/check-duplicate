@@ -10,16 +10,17 @@ import org.aspectj.lang.reflect.MethodSignature;
 @Aspect
 public class IdempotentAOP {
 
-    private final IdempotentEngineRegistry idempotentEngineRegistry;
-    public IdempotentAOP(IdempotentEngineRegistry idempotentEngineRegistry){
-        this.idempotentEngineRegistry = idempotentEngineRegistry;
-    }
+  private final IdempotentEngineRegistry idempotentEngineRegistry;
 
-    @Before("@annotation(com.example.deduplicate.library.annotation.Idempotent)")
-    public Object before(JoinPoint joinPoint) {
-        MethodSignature signature = (MethodSignature)joinPoint.getSignature();
-        Idempotent annotation = signature.getMethod().getDeclaredAnnotation(Idempotent.class);
-        String key = annotation.id();
-        return idempotentEngineRegistry.get(key).execute(joinPoint.getArgs());
-    }
+  public IdempotentAOP(IdempotentEngineRegistry idempotentEngineRegistry) {
+    this.idempotentEngineRegistry = idempotentEngineRegistry;
+  }
+
+  @Before("@annotation(com.example.deduplicate.library.annotation.Idempotent)")
+  public Object before(JoinPoint joinPoint) {
+    MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+    Idempotent annotation = signature.getMethod().getDeclaredAnnotation(Idempotent.class);
+    String key = annotation.id();
+    return idempotentEngineRegistry.get(key).execute(joinPoint.getArgs());
+  }
 }

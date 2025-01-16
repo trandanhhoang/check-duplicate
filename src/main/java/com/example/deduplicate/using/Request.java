@@ -6,6 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class Request {
-    private String name;
-    private int age;
+
+  private String name;
+  private int age;
 }

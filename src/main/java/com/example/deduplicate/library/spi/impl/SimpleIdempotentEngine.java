@@ -26,6 +26,6 @@ public class SimpleIdempotentEngine implements IdempotentEngine {
       return null;
     }
     log.info("Idempotence detected");
-    return idempotentHandler.handle(args);
+    return idempotentHandler.handle(args, key);
   }
 }

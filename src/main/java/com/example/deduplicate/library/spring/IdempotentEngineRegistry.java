@@ -1,7 +1,5 @@
 package com.example.deduplicate.library.spring;
 
-import static com.example.deduplicate.library.annotation.Handle.IdempotentStrategy.THROWING;
-
 import com.example.deduplicate.library.annotation.Expression;
 import com.example.deduplicate.library.annotation.Expression.Mode;
 import com.example.deduplicate.library.annotation.Handle;
@@ -12,7 +10,6 @@ import com.example.deduplicate.library.spi.IdempotentKeyExtractor;
 import com.example.deduplicate.library.spi.IdempotentPersistence;
 import com.example.deduplicate.library.spi.IdempotentTtlAdvisor;
 import com.example.deduplicate.library.spi.impl.FixedTtlAdvisor;
-import com.example.deduplicate.library.spi.impl.IdempotentHandlerImpl;
 import com.example.deduplicate.library.spi.impl.SimpleIdempotentEngine;
 import com.example.deduplicate.library.support.expression.SpElPropertyExtractor;
 import com.example.deduplicate.library.support.expression.SpElTemplateExtractor;
@@ -33,7 +30,6 @@ import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.type.AnnotationMetadata;

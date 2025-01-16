@@ -26,13 +26,13 @@ public class IdemController {
       expression = @Expression(
           value = {"#{request.name}",
               "#{params1}"},
-          propertySource = "request",
-      mode = Mode.TEMPLATE),
+          mode = Mode.TEMPLATE),
       fixedDuration = 10,
       handle = @Handle(
           handler = CustomIdempotentHandler.class
       )
   )
   public void idempotentTemplate(String params1, Request request) {
+    System.out.println("hoang hehe");
   }
 }
