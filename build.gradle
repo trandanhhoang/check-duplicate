@@ -27,6 +27,7 @@ dependencies {
 
     implementation 'org.aspectj:aspectjweaver'
     implementation 'org.aspectj:aspectjrt'
+
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
     implementation 'org.springframework.boot:spring-boot-starter'

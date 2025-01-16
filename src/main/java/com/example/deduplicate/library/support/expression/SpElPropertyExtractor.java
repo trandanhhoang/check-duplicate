@@ -11,8 +11,7 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
  * {@code Object[] source} from the {@link SpElKeyExtractor#getRootObject(Object[])} input
  *
  * <p>This class defines how the targeted argument is accessed at runtime. Specifically, storing
- * the
- * actual index of the argument, so that it can be accessed via random access during runtime.
+ * the actual index of the argument, so that it can be accessed via random access during runtime.
  */
 public class SpElPropertyExtractor extends SpElKeyExtractor {
 

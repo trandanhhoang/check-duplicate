@@ -8,7 +8,15 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.ANNOTATION_TYPE)
 @Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
-public @interface Handle {
+public @interface RHandle {
+
+  IdempotentStrategy strategy() default IdempotentStrategy.THROWING;
 
   Class<? extends IdempotentHandler> handler() default IdempotentHandlerImpl.class;
+
+  enum IdempotentStrategy {
+
+    THROWING,
+    RETURNING,
+  }
 }

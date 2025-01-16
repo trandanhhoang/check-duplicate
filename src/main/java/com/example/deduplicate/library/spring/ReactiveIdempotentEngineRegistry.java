@@ -1,13 +1,13 @@
 package com.example.deduplicate.library.spring;
 
 import com.example.deduplicate.library.annotation.Handle;
-import com.example.deduplicate.library.annotation.Idempotent;
-import com.example.deduplicate.library.spi.IdempotentEngine;
-import com.example.deduplicate.library.spi.IdempotentHandler;
+import com.example.deduplicate.library.annotation.RIdempotent;
 import com.example.deduplicate.library.spi.IdempotentKeyExtractor;
-import com.example.deduplicate.library.spi.IdempotentPersistence;
 import com.example.deduplicate.library.spi.IdempotentTtlAdvisor;
-import com.example.deduplicate.library.spi.impl.SimpleIdempotentEngine;
+import com.example.deduplicate.library.spi.impl.SimpleReactiveIdempotentEngine;
+import com.example.deduplicate.library.spi.reactive.ReactiveIdempotentEngine;
+import com.example.deduplicate.library.spi.reactive.ReactiveIdempotentHandler;
+import com.example.deduplicate.library.spi.reactive.ReactiveIdempotentPersistence;
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,11 +20,11 @@ import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.MethodMetadata;
 
-public class IdempotentEngineRegistry extends AbstractEngineRegistry {
+public class ReactiveIdempotentEngineRegistry extends AbstractEngineRegistry {
 
-  private final Map<String, IdempotentEngine> idempotentEngines = new HashMap<>();
+  private final Map<String, ReactiveIdempotentEngine> reactiveIdempotentEngines = new HashMap<>();
 
-  public IdempotentEngineRegistry(BeanFactory beanFactory) {
+  public ReactiveIdempotentEngineRegistry(BeanFactory beanFactory) {
     super(beanFactory);
     discoverEngines("com.example.deduplicate.using");
   }
@@ -37,9 +37,9 @@ public class IdempotentEngineRegistry extends AbstractEngineRegistry {
     for (BeanDefinition beanDefinition : listBean) {
       if (beanDefinition instanceof AnnotatedBeanDefinition) {
         AnnotationMetadata annotationMetadata = ((AnnotatedBeanDefinition) beanDefinition).getMetadata();
-        Set<MethodMetadata> methodMetadatas = annotationMetadata.getAnnotatedMethods(
-            Idempotent.class.getCanonicalName());
-        for (MethodMetadata methodMetadata : methodMetadatas) {
+        Set<MethodMetadata> metadataSet = annotationMetadata.getAnnotatedMethods(
+            RIdempotent.class.getCanonicalName());
+        for (MethodMetadata methodMetadata : metadataSet) {
           createEngineEntry(methodMetadata);
         }
       }
@@ -49,24 +49,23 @@ public class IdempotentEngineRegistry extends AbstractEngineRegistry {
   @Override
   protected void createEngineEntry(MethodMetadata methodMetadata) {
     final MergedAnnotation<? extends Annotation> annotationMetadata =
-        methodMetadata.getAnnotations().get(Idempotent.class);
+        methodMetadata.getAnnotations().get(RIdempotent.class);
     final IdempotentKeyExtractor keyExtractor = resolveIdempotentKeyExtractor(methodMetadata,
         annotationMetadata);
-    final IdempotentPersistence idempotencePersistence = createBean(
+    final ReactiveIdempotentPersistence persistent = createBean(
         annotationMetadata.getClass("persistent"));
-    final IdempotentHandler idempotenceHandler = createBean(
+    final ReactiveIdempotentHandler handler = createBean(
         annotationMetadata.getAnnotation("handle", Handle.class).getClass("handler"));
     final IdempotentTtlAdvisor idempotentTtlAdvisor =
         resolveTtlAdvisor(annotationMetadata);
 
-    idempotentEngines.put(annotationMetadata.getString("id"),
-
-        new SimpleIdempotentEngine(keyExtractor
-            , idempotencePersistence, idempotenceHandler, idempotentTtlAdvisor));
+    reactiveIdempotentEngines.put(annotationMetadata.getString("id"),
+        new SimpleReactiveIdempotentEngine(keyExtractor
+            , persistent, handler, idempotentTtlAdvisor));
   }
 
-  public IdempotentEngine get(String name) {
-    return idempotentEngines.get(name);
+  public ReactiveIdempotentEngine get(String name) {
+    return reactiveIdempotentEngines.get(name);
   }
 
 }
