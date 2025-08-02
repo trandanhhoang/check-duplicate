@@ -1,5 +1,5 @@
 # Tự viết 1 library với annotation, aop, spring framework
-- More detial: https://trandanhhoang.github.io/docs/java-springboot/how-to-write-library-with-java-springboot
+- ref: https://trandanhhoang.github.io/docs/java-springboot/how-to-write-library-with-java-springboot
 
 # Cách sử dụng
 - Thêm annotation trên method cần check duplicate, thêm các thuộc tính muốn check duplicate.
